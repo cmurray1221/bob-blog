@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backwards Down the Number Line</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper: #f2ede4;
+      --ink: #1c1810;
+      --ink-faded: #6b6050;
+      --ink-ghost: #a89880;
+      --rule: rgba(28,24,16,0.15);
+      --rule-strong: rgba(28,24,16,0.28);
+      --red: #8b2020;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Lora', serif;
+      min-height: 100vh;
+      /* subtle paper texture via repeating gradient */
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 27px,
+          rgba(28,24,16,0.035) 27px,
+          rgba(28,24,16,0.035) 28px
+        );
+    }
+
+    /* ---- HEADER ---- */
+    .site-header {
+      border-bottom: 2px double var(--rule-strong);
+      background: var(--paper);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 52px;
+    }
+
+    .site-name {
+      font-family: 'Special Elite', cursive;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      color: var(--ink-faded);
+    }
+
+    .header-progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .progress-track {
+      width: 100px;
+      height: 2px;
+      background: var(--rule);
+      border-radius: 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--red);
+      transition: width 0.6s ease;
+    }
+
+    .progress-text {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--ink-ghost);
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 5rem 2rem 3rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .hero-title {
+      font-family: 'Special Elite', cursive;
+      font-size: clamp(32px, 6vw, 54px);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      margin-bottom: 2rem;
+      color: var(--ink);
+    }
+
+    .hero-quote {
+      border-left: 3px solid var(--red);
+      padding: 0.5rem 0 0.5rem 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-quote p {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    .hero-attribution {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--ink-ghost);
+      padding-left: 1.25rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ---- UP NEXT ---- */
+    #up-next-banner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0.75rem 2rem;
+      border-bottom: 1px solid var(--rule);
+      font-family: 'Special Elite', cursive;
+      font-size: 12px;
+      color: var(--ink-faded);
+      letter-spacing: 0.06em;
+    }
+
+    /* ---- POSTS ---- */
+    .posts-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    .post {
+      padding: 2.75rem 0;
+      border-bottom: 1px solid var(--rule);
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: none; }
+    }
+
+    .post-eyebrow {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 0.6rem;
+    }
+
+    .post-day {
+      font-family: 'Special Elite', cursive;
+      font-size: 11px;
+      color: var(--red);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .post-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--ink-ghost);
+    }
+
+    .post-year {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--ink-ghost);
+      margin-left: auto;
+    }
+
+    .post-title {
+      font-family: 'Special Elite', cursive;
+      font-size: 24px;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+    }
+
+    .post-notes {
+      font-family: 'Lora', serif;
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--ink);
+      font-style: italic;
+    }
+
+    /* ---- EMPTY / LOADING ---- */
+    .empty {
+      padding: 5rem 0;
+      text-align: center;
+      font-family: 'Special Elite', cursive;
+      color: var(--ink-ghost);
+      font-size: 16px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      border-top: 2px double var(--rule-strong);
+      padding: 1.75rem 2rem;
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--ink-ghost);
+      letter-spacing: 0.08em;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1.25rem 2.5rem; }
+      .posts-wrap { padding: 0 1.25rem 4rem; }
+      .header-inner { padding: 0 1.25rem; }
+      #up-next-banner { padding: 0.75rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <span class="site-name">Backwards Down the Number Line</span>
+      <div class="header-progress">
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <span class="progress-text" id="progress-text">0 / 40</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1 class="hero-title">Backwards Down<br />the Number Line</h1>
+      <div class="hero-quote">
+        <p>Ah, but I was so much older then.<br />I'm younger than that now.</p>
+      </div>
+      <p class="hero-attribution">— Bob Dylan, My Back Pages (1964)</p>
+    </section>
+
+    <div id="up-next-banner" style="display:none"></div>
+
+    <section class="posts-wrap" id="posts-wrap">
+      <p class="empty">Loading…</p>
+    </section>
+  </main>
+
+  <footer>
+    40 studio albums &nbsp;·&nbsp; Newest first &nbsp;·&nbsp; Updated daily
+  </footer>
+
+  <script>
+    // All 40 Dylan studio albums, newest to oldest
+    const ALL_ALBUMS = [
+      { title: "The Philosophy of Modern Song", year: 2022 },
+      { title: "Rough and Rowdy Ways", year: 2020 },
+      { title: "Triplicate", year: 2017 },
+      { title: "Fallen Angels", year: 2016 },
+      { title: "Shadows in the Night", year: 2015 },
+      { title: "Tempest", year: 2012 },
+      { title: "Christmas in the Heart", year: 2009 },
+      { title: "Together Through Life", year: 2009 },
+      { title: "Modern Times", year: 2006 },
+      { title: "Love and Theft", year: 2001 },
+      { title: "\"Live\" 1961–2000", year: 2001 },
+      { title: "Things Have Changed", year: 2000 },
+      { title: "Time Out of Mind", year: 1997 },
+      { title: "World Gone Wrong", year: 1993 },
+      { title: "Good as I Been to You", year: 1992 },
+      { title: "Under the Red Sky", year: 1990 },
+      { title: "Oh Mercy", year: 1989 },
+      { title: "Down in the Groove", year: 1988 },
+      { title: "Knocked Out Loaded", year: 1986 },
+      { title: "Empire Burlesque", year: 1985 },
+      { title: "Infidels", year: 1983 },
+      { title: "Shot of Love", year: 1981 },
+      { title: "Saved", year: 1980 },
+      { title: "Slow Train Coming", year: 1979 },
+      { title: "Street-Legal", year: 1978 },
+      { title: "Desire", year: 1976 },
+      { title: "The Basement Tapes", year: 1975 },
+      { title: "Blood on the Tracks", year: 1975 },
+      { title: "Planet Waves", year: 1974 },
+      { title: "Dylan", year: 1973 },
+      { title: "Pat Garrett & Billy the Kid", year: 1973 },
+      { title: "New Morning", year: 1970 },
+      { title: "Self Portrait", year: 1970 },
+      { title: "Nashville Skyline", year: 1969 },
+      { title: "John Wesley Harding", year: 1967 },
+      { title: "Blonde on Blonde", year: 1966 },
+      { title: "Highway 61 Revisited", year: 1965 },
+      { title: "Bringing It All Back Home", year: 1965 },
+      { title: "Another Side of Bob Dylan", year: 1964 },
+      { title: "The Times They Are a-Changin'", year: 1964 },
+      { title: "The Freewheelin' Bob Dylan", year: 1963 },
+      { title: "Bob Dylan", year: 1962 },
+    ];
+
+    function renderUpNext(count) {
+      const banner = document.getElementById('up-next-banner');
+      if (count >= ALL_ALBUMS.length) { banner.style.display = 'none'; return; }
+      const next = ALL_ALBUMS[count];
+      banner.textContent = `Next up: ${next.title} (${next.year})`;
+      banner.style.display = 'block';
+    }
+
+    async function loadPosts() {
+      const wrap = document.getElementById('posts-wrap');
+      try {
+        const res = await fetch('posts.json?' + Date.now());
+        if (!res.ok) throw new Error();
+        const posts = await res.json();
+
+        const pct = Math.round((posts.length / 40) * 100);
+        document.getElementById('progress-fill').style.width = pct + '%';
+        document.getElementById('progress-text').textContent = posts.length + ' / 40';
+        renderUpNext(posts.length);
+
+        if (posts.length === 0) {
+          wrap.innerHTML = '<p class="empty">No entries yet.</p>';
+          return;
+        }
+
+        // Show in posting order (newest post first = most recently added)
+        const sorted = [...posts].sort((a, b) => b.day - a.day);
+        wrap.innerHTML = sorted.map((p, i) => `
+          <article class="post" style="animation-delay:${i * 0.06}s">
+            <div class="post-eyebrow">
+              <span class="post-day">Day ${p.day}</span>
+              <span class="post-date">${p.date || ''}</span>
+              ${p.year ? `<span class="post-year">${p.year}</span>` : ''}
+            </div>
+            <h2 class="post-title">${esc(p.title)}</h2>
+            ${p.notes ? `<p class="post-notes">${esc(p.notes)}</p>` : ''}
+          </article>
+        `).join('');
+      } catch(e) {
+        wrap.innerHTML = '<p class="empty">Could not load posts. Make sure posts.json is in the same folder.</p>';
+      }
+    }
+
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>
