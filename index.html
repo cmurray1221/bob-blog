@@ -342,15 +342,18 @@
         }
 
         // Show in posting order (newest post first = most recently added)
-        const sorted = [...posts].sort((a, b) => b.day - a.day);
+        const sorted = [...posts].sort((a, b) => b.album - a.album);
         wrap.innerHTML = sorted.map((p, i) => `
           <article class="post" style="animation-delay:${i * 0.06}s">
             <div class="post-eyebrow">
-              <span class="post-day">Day ${p.day}</span>
-              <span class="post-date">${p.date || ''}</span>
+              <span class="post-day">Album ${p.album}</span>
               ${p.year ? `<span class="post-year">${p.year}</span>` : ''}
             </div>
             <h2 class="post-title">${esc(p.title)}</h2>
+            <div style="display:flex; align-items:baseline; gap:1.5rem; margin-bottom:${p.notes ? '0.75rem' : '0'}">
+              ${p.grade != null ? `<span style="font-family:'Special Elite',cursive; font-size:22px; color:var(--red)">${p.grade}<span style="font-size:13px; color:var(--ink-ghost)">/10</span></span>` : ''}
+              ${p.word ? `<span style="font-family:'Lora',serif; font-style:italic; font-size:16px; color:var(--ink-faded)">${esc(p.word)}</span>` : ''}
+            </div>
             ${p.notes ? `<p class="post-notes">${esc(p.notes)}</p>` : ''}
           </article>
         `).join('');
