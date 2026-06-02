@@ -78,4 +78,12 @@
   "grade": 8.6,
   "word": "Frosty"
   }
+  ,
+  {
+   "album": 30,
+  "title": "Time Out of Mind",
+  "year": 1997,
+  "grade": 9.25,
+  "word": "Haunted"
+  }
 ]
