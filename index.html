@@ -260,6 +260,11 @@
 
     <div id="up-next-banner" style="display:none"></div>
 
+    <section class="posts-wrap" id="rankings-wrap" style="display:none; padding-bottom:0; border-bottom: 1px solid var(--rule);">
+      <h2 style="font-family:'Special Elite',cursive; font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faded); padding: 1.5rem 0 1rem;">Ranked so far</h2>
+      <div id="rankings-list"></div>
+    </section>
+
     <section class="posts-wrap" id="posts-wrap">
       <p class="empty">Loading…</p>
     </section>
@@ -314,6 +319,22 @@
       { title: "Bob Dylan", year: 1962 },
     ];
 
+    function renderRankings(posts) {
+      const ranked = posts.filter(p => p.grade != null).sort((a, b) => b.grade - a.grade);
+      const wrap = document.getElementById('rankings-wrap');
+      const list = document.getElementById('rankings-list');
+      if (ranked.length === 0) { wrap.style.display = 'none'; return; }
+      wrap.style.display = 'block';
+      list.innerHTML = ranked.map((p, i) => `
+        <div style="display:flex; align-items:baseline; gap:12px; padding: 0.5rem 0; border-bottom: 0.5px solid var(--rule);">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-ghost); width:18px;">${i + 1}.</span>
+          <span style="font-family:'Special Elite',cursive; font-size:15px; flex:1;">${esc(p.title)}</span>
+          ${p.word ? `<span style="font-family:'Lora',serif; font-style:italic; font-size:13px; color:var(--ink-faded);">${esc(p.word)}</span>` : ''}
+          <span style="font-family:'Special Elite',cursive; font-size:16px; color:var(--red);">${p.grade}<span style="font-size:11px; color:var(--ink-ghost);">/10</span></span>
+        </div>
+      `).join('');
+    }
+
     function renderUpNext(count) {
       const banner = document.getElementById('up-next-banner');
       if (count >= ALL_ALBUMS.length) { banner.style.display = 'none'; return; }
@@ -333,6 +354,7 @@
         document.getElementById('progress-fill').style.width = pct + '%';
         document.getElementById('progress-text').textContent = posts.length + ' / 40';
         renderUpNext(posts.length);
+        renderRankings(posts);
 
         if (posts.length === 0) {
           wrap.innerHTML = '<p class="empty">No entries yet.</p>';
