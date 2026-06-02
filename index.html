@@ -227,105 +227,11 @@
       margin: 0 auto;
     }
 
-    /* ---- RANKINGS ---- */
-    .rankings-wrap {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 3rem 2rem 0;
-      border-bottom: 2px double var(--rule-strong);
-    }
-
-    .rankings-heading {
-      font-family: 'Special Elite', cursive;
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-ghost);
-      margin-bottom: 1.5rem;
-    }
-
-    .ranking-row {
-      display: flex;
-      align-items: baseline;
-      gap: 0;
-      padding: 0.55rem 0;
-      border-bottom: 1px solid var(--rule);
-      opacity: 0;
-      transform: translateX(-6px);
-      animation: fadeIn 0.4s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; transform: none; }
-    }
-
-    .rank-pos {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      color: var(--ink-ghost);
-      width: 2rem;
-      flex-shrink: 0;
-    }
-
-    .rank-title {
-      font-family: 'Lora', serif;
-      font-size: 15px;
-      color: var(--ink);
-      flex: 1;
-      min-width: 0;
-    }
-
-    .rank-year {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      color: var(--ink-ghost);
-      margin-right: 1.25rem;
-    }
-
-    .rank-bar-wrap {
-      width: 60px;
-      height: 2px;
-      background: var(--rule);
-      margin: 0 1rem;
-      align-self: center;
-      flex-shrink: 0;
-    }
-
-    .rank-bar-fill {
-      height: 100%;
-      background: var(--red);
-    }
-
-    .rank-grade {
-      font-family: 'Special Elite', cursive;
-      font-size: 16px;
-      color: var(--red);
-      width: 3rem;
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-    .rank-grade span {
-      font-size: 11px;
-      color: var(--ink-ghost);
-    }
-
-    .rankings-empty {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      color: var(--ink-ghost);
-      padding: 1.5rem 0 2rem;
-      letter-spacing: 0.05em;
-    }
-
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2.5rem; }
       .posts-wrap { padding: 0 1.25rem 4rem; }
       .header-inner { padding: 0 1.25rem; }
       #up-next-banner { padding: 0.75rem 1.25rem; }
-      .rankings-wrap { padding: 2rem 1.25rem 0; }
-      .rank-bar-wrap { display: none; }
-      .rank-year { display: none; }
     }
   </style>
 </head>
@@ -352,11 +258,6 @@
       <p class="hero-attribution">— Bob Dylan, My Back Pages (1964)</p>
     </section>
 
-    <section class="rankings-wrap" id="rankings-wrap" style="display:none">
-      <p class="rankings-heading">Ranked thus far</p>
-      <div id="rankings-list"></div>
-    </section>
-
     <div id="up-next-banner" style="display:none"></div>
 
     <section class="posts-wrap" id="posts-wrap">
@@ -381,8 +282,6 @@
       { title: "Together Through Life", year: 2009 },
       { title: "Modern Times", year: 2006 },
       { title: "Love and Theft", year: 2001 },
-      { title: "\"Live\" 1961–2000", year: 2001 },
-      { title: "Things Have Changed", year: 2000 },
       { title: "Time Out of Mind", year: 1997 },
       { title: "World Gone Wrong", year: 1993 },
       { title: "Good as I Been to You", year: 1992 },
@@ -415,27 +314,6 @@
       { title: "Bob Dylan", year: 1962 },
     ];
 
-    function renderRankings(posts) {
-      const section = document.getElementById('rankings-wrap');
-      const list = document.getElementById('rankings-list');
-      const rated = posts.filter(p => p.grade != null);
-      if (rated.length === 0) {
-        section.style.display = 'none';
-        return;
-      }
-      section.style.display = 'block';
-      const sorted = [...rated].sort((a, b) => b.grade - a.grade);
-      list.innerHTML = sorted.map((p, i) => `
-        <div class="ranking-row" style="animation-delay:${i * 0.045}s">
-          <span class="rank-pos">${i + 1}.</span>
-          <span class="rank-title">${esc(p.title)}</span>
-          <span class="rank-year">${p.year || ''}</span>
-          <span class="rank-bar-wrap"><span class="rank-bar-fill" style="width:${Math.round((p.grade / 10) * 100)}%"></span></span>
-          <span class="rank-grade">${p.grade}<span>/10</span></span>
-        </div>
-      `).join('');
-    }
-
     function renderUpNext(count) {
       const banner = document.getElementById('up-next-banner');
       if (count >= ALL_ALBUMS.length) { banner.style.display = 'none'; return; }
@@ -451,7 +329,6 @@
         if (!res.ok) throw new Error();
         const posts = await res.json();
 
-        renderRankings(posts);
         const pct = Math.round((posts.length / 40) * 100);
         document.getElementById('progress-fill').style.width = pct + '%';
         document.getElementById('progress-text').textContent = posts.length + ' / 40';
