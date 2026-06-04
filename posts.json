@@ -90,8 +90,16 @@
   {
    "album": 29,
   "title": "World Gone Wrong",
-  "year": 1997,
+  "year": 1993,
   "grade": 7.7,
   "word": "Gaslit"
+  }
+    ,
+  {
+   "album": 28,
+  "title": "Good As I Been To You",
+  "year": 1992,
+  "grade": 7.5,
+  "word": "Earthen"
   }
 ]
