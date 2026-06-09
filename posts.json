@@ -110,4 +110,12 @@
   "grade": 2.5,
   "word": "Yoikes"
   }
+       ,
+  {
+   "album": 26,
+  "title": "Oh Mercy",
+  "year": 1989,
+  "grade": 8.5,
+  "word": "Crispy"
+  }
 ]
